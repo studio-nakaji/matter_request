@@ -3,6 +3,10 @@ import datetime as date
 import calendar as cal
 import time
 import jpholiday
+from pydrive.drive import GoogleDrive
+from pydrive.auth import GoogleAuth
+import os
+
 
 def check_holiday(day):
     if day.weekday() >= 5 or jpholiday.is_holiday(day):
@@ -45,7 +49,11 @@ def get_days_money(start_day, end_day):
         remaining_days += check_holiday(end_day)
         month = month-1
         return month, remaining_days
-        
+
+json = "/Volumes/GoogleDrive/マイドライブ/MyScript/My_Python/Nstudio/matter_request/matter_request_secret.json"
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth(json)
+drive = GoogleDrive(gauth)
 
 today = date.datetime.today()
 end_day = today + date.timedelta(days=60)
@@ -182,7 +190,7 @@ if genre != "":
                 num_range = max(num_range)-min(num_range)+1
             else:                           #話数で指定
                 num_range = len(right_column.multiselect("話数(複数選択可)",options=range(1,25)))
-                left_column.write(f"{len(num_range)}話")
+                left_column.write(f"計{num_range}話")
         else:                                   #TVシリーズ・劇場以外
             base_restraint_money = 400000
             base_work_money = 15000
@@ -201,7 +209,7 @@ if genre != "":
             work_monay = left_column.number_input("E 月額拘束料金(円)/1人",value=base_restraint_money, step=5000)
             work_human = left_column.number_input("E 人数",value=1, step=1)
             # left_column.write(f"小計:¥{int(month_range*work_human*work_monay+work_renge/20*work_human*work_monay)}")
-        else:
+        else:                                   #単価の場合
             cut_num = left_column.number_input("E カット数/1話",value=10)
             work_monay = right_column.number_input("E 単価(円)",value=base_work_money, step=work_money_step)
             # if genre != genre_list[4]:
@@ -210,8 +218,8 @@ if genre != "":
             #             left_column.write(f"小計:¥{int(num_range*cut_num*work_monay)}")
             #     else:
             #         left_column.write(f"小計:¥{num_range*cut_num*work_monay:,}円")
-    # days = st.slider("日数",7,180)
-    
+    area = st.text_area("備考")
 
 if genre != "" and len(summary)>0:
-    st.button("上記の内容で依頼する")
+    if st.button("上記の内容で依頼する"):
+        st.write("送信")
