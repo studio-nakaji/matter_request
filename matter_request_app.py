@@ -180,7 +180,7 @@ if genre != "":
             if num_range_check == False:
                 num_range = right_column.slider("本数",min_value=1, max_value=24, value=(1,5))
                 num_range = max(num_range)-min(num_range)+1
-            else:
+            else:                           #話数で指定
                 num_range = len(right_column.multiselect("話数(複数選択可)",options=range(1,25)))
                 left_column.write(f"{len(num_range)}話")
         else:                                   #TVシリーズ・劇場以外
@@ -200,16 +200,16 @@ if genre != "":
         if work_type == work_type_list[0]:      #拘束契約の場合
             work_monay = left_column.number_input("E 月額拘束料金(円)/1人",value=base_restraint_money, step=5000)
             work_human = left_column.number_input("E 人数",value=1, step=1)
-            left_column.write(f"小計:¥{int(month_range*work_human*work_monay+work_renge/20*work_human*work_monay)}")
+            # left_column.write(f"小計:¥{int(month_range*work_human*work_monay+work_renge/20*work_human*work_monay)}")
         else:
             cut_num = left_column.number_input("E カット数/1話",value=10)
             work_monay = right_column.number_input("E 単価(円)",value=base_work_money, step=work_money_step)
-            if genre != genre_list[4]:
-                if num_range_check == True:
-                    if len(num_range)>1:
-                        left_column.write(f"小計:¥{int(num_range*cut_num*work_monay)}")
-                else:
-                    left_column.write(f"小計:¥{num_range*cut_num*work_monay:,}円")
+            # if genre != genre_list[4]:
+            #     if num_range_check == True:
+            #         if len(num_range)>1:
+            #             left_column.write(f"小計:¥{int(num_range*cut_num*work_monay)}")
+            #     else:
+            #         left_column.write(f"小計:¥{num_range*cut_num*work_monay:,}円")
     # days = st.slider("日数",7,180)
     
 
